@@ -1,6 +1,6 @@
 // ===== CONFIGURATION =====
 const CONFIG = {
-  API_BASE_URL: 'https://your-backend-url.railway.app/api', // We'll update this after backend deployment
+  API_BASE_URL: 'https://mybookmyvibe-production.up.railway.app/api', // Production Railway backend
   ITEMS_PER_PAGE: 12,
   DEBOUNCE_DELAY: 300,
   TOAST_DURATION: 4000
