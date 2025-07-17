@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🚀 Success!</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 40px;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 600px;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        .emoji {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="emoji">📚🎵</span>
+        <h1>Spotify Authorization Successful!</h1>
+        <p>Great! You've successfully connected your Spotify account to MyBookMyVibe. You can now close this window and return to the app to enjoy personalized music recommendations for your favorite books.</p>
+        <a href="#" onclick="window.close()" class="btn">Close Window</a>
+    </div>
+    
+    <script>
+        // Auto-close after 5 seconds if possible
+        setTimeout(() => {
+            try {
+                window.close();
+            } catch (e) {
+                // If we can't close automatically, show a message
+                document.querySelector('p').innerHTML = 'You can now close this window and return to MyBookMyVibe to enjoy your personalized music recommendations!';
+            }
+        }, 5000);
+        
+        // Post message to parent window if available
+        if (window.opener) {
+            window.opener.postMessage({ type: 'spotify_auth_success' }, '*');
+        }
+    </script>
+</body>
+</html>

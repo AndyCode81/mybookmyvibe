@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyBookMyVibe - Discover Your Reading Soundtrack</title>
+    
+    <!-- Meta tags for SEO and social sharing -->
+    <meta name="description" content="Discover the perfect music vibe for your reading experience. Find books, get personalized music recommendations, and connect with fellow readers.">
+    <meta name="keywords" content="books, music, reading, spotify, book recommendations, music for reading">
+    <meta name="author" content="MyBookMyVibe">
+    
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="MyBookMyVibe - Discover Your Reading Soundtrack">
+    <meta property="og:description" content="Find the perfect music to accompany your favorite books">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mybookmyvibe.netlify.app">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading your book vibes...</p>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-book-open"></i>
+                <span>MyBookMyVibe</span>
+            </div>
+            
+            <div class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#discover" class="nav-link">Discover</a>
+                <a href="#trending" class="nav-link">Trending</a>
+                <a href="#about" class="nav-link">About</a>
+            </div>
+            
+            <div class="nav-auth">
+                <div id="auth-buttons" class="auth-buttons">
+                    <button class="btn btn-outline" onclick="showLoginModal()">Login</button>
+                    <button class="btn btn-primary" onclick="showRegisterModal()">Sign Up</button>
+                </div>
+                
+                <div id="user-menu" class="user-menu" style="display: none;">
+                    <div class="user-avatar" onclick="toggleUserDropdown()">
+                        <i class="fas fa-user"></i>
+                        <span id="user-name">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="user-dropdown" id="user-dropdown">
+                        <a href="#" onclick="showProfile()"><i class="fas fa-user"></i> Profile</a>
+                        <a href="#" onclick="showMyReviews()"><i class="fas fa-star"></i> My Reviews</a>
+                        <a href="#" onclick="showSettings()"><i class="fas fa-cog"></i> Settings</a>
+                        <hr>
+                        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-toggle" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1>Discover Your Perfect <span class="highlight">Reading Soundtrack</span></h1>
+                <p>Find the ideal music to accompany your favorite books. Explore curated playlists, discover new reads, and connect with fellow book lovers.</p>
+                
+                <div class="hero-search">
+                    <div class="search-container">
+                        <input type="text" id="hero-search" placeholder="Search for books, authors, or genres...">
+                        <button onclick="searchBooks()" class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="hero-features">
+                    <div class="feature">
+                        <i class="fas fa-music"></i>
+                        <span>Music Recommendations</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-book"></i>
+                        <span>Book Discovery</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-users"></i>
+                        <span>Community Reviews</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-image">
+                <div class="floating-elements">
+                    <div class="floating-book">📚</div>
+                    <div class="floating-music">🎵</div>
+                    <div class="floating-heart">💝</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Results -->
+        <section id="search-results" class="search-results" style="display: none;">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Search Results</h2>
+                    <div class="search-filters">
+                        <select id="sort-filter" onchange="applySortFilter()">
+                            <option value="relevance">Sort by Relevance</option>
+                            <option value="rating">Sort by Rating</option>
+                            <option value="newest">Newest First</option>
+                            <option value="title">Title A-Z</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="search-results-grid" class="books-grid">
+                    <!-- Search results will be populated here -->
+                </div>
+                <div id="search-pagination" class="pagination">
+                    <!-- Pagination will be populated here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Trending Books -->
+        <section id="trending" class="trending">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Trending Books</h2>
+                    <p>Discover what everyone's reading right now</p>
+                </div>
+                <div id="trending-books" class="books-grid">
+                    <!-- Trending books will be populated here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section id="discover" class="categories">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Discover by Genre</h2>
+                    <p>Find your next favorite book by exploring different genres</p>
+                </div>
+                <div class="categories-grid">
+                    <div class="category-card" onclick="searchByCategory('fiction')">
+                        <i class="fas fa-feather-alt"></i>
+                        <h3>Fiction</h3>
+                        <p>Explore imaginary worlds</p>
+                    </div>
+                    <div class="category-card" onclick="searchByCategory('mystery')">
+                        <i class="fas fa-search"></i>
+                        <h3>Mystery</h3>
+                        <p>Solve thrilling puzzles</p>
+                    </div>
+                    <div class="category-card" onclick="searchByCategory('romance')">
+                        <i class="fas fa-heart"></i>
+                        <h3>Romance</h3>
+                        <p>Fall in love with stories</p>
+                    </div>
+                    <div class="category-card" onclick="searchByCategory('fantasy')">
+                        <i class="fas fa-dragon"></i>
+                        <h3>Fantasy</h3>
+                        <p>Enter magical realms</p>
+                    </div>
+                    <div class="category-card" onclick="searchByCategory('science fiction')">
+                        <i class="fas fa-rocket"></i>
+                        <h3>Sci-Fi</h3>
+                        <p>Journey to the future</p>
+                    </div>
+                    <div class="category-card" onclick="searchByCategory('biography')">
+                        <i class="fas fa-user"></i>
+                        <h3>Biography</h3>
+                        <p>Learn from great lives</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text">
+                        <h2>About MyBookMyVibe</h2>
+                        <p>We believe that the right music can transform your reading experience. Our platform combines the world's largest book database with sophisticated music recommendation algorithms to create the perfect atmosphere for every story.</p>
+                        
+                        <div class="about-features">
+                            <div class="about-feature">
+                                <i class="fas fa-spotify"></i>
+                                <h4>Spotify Integration</h4>
+                                <p>Get personalized playlists that match your book's mood and genre</p>
+                            </div>
+                            <div class="about-feature">
+                                <i class="fas fa-database"></i>
+                                <h4>Vast Book Library</h4>
+                                <p>Access millions of books through Google Books API</p>
+                            </div>
+                            <div class="about-feature">
+                                <i class="fas fa-comments"></i>
+                                <h4>Community Reviews</h4>
+                                <p>Share your thoughts and discover new perspectives</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-image">
+                        <div class="stats-card">
+                            <div class="stat">
+                                <h3 id="books-count">10K+</h3>
+                                <p>Books Cataloged</p>
+                            </div>
+                            <div class="stat">
+                                <h3 id="users-count">2K+</h3>
+                                <p>Active Users</p>
+                            </div>
+                            <div class="stat">
+                                <h3 id="reviews-count">5K+</h3>
+                                <p>Reviews Written</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i class="fas fa-book-open"></i>
+                        <span>MyBookMyVibe</span>
+                    </div>
+                    <p>Discover your perfect reading soundtrack</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-spotify"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Discover</h4>
+                    <ul>
+                        <li><a href="#trending">Trending Books</a></li>
+                        <li><a href="#discover">Browse Genres</a></li>
+                        <li><a href="#">New Releases</a></li>
+                        <li><a href="#">Popular Playlists</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="#">Book Reviews</a></li>
+                        <li><a href="#">Discussion Forums</a></li>
+                        <li><a href="#">Reading Groups</a></li>
+                        <li><a href="#">Featured Authors</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 MyBookMyVibe. All rights reserved.</p>
+                <p>Made with ❤️ for book and music lovers</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Welcome Back</h2>
+                <span class="close" onclick="closeModal('login-modal')">&times;</span>
+            </div>
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Login</button>
+            </form>
+            <div class="modal-footer">
+                <p>Don't have an account? <a href="#" onclick="showRegisterModal(); closeModal('login-modal');">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Join MyBookMyVibe</h2>
+                <span class="close" onclick="closeModal('register-modal')">&times;</span>
+            </div>
+            <form id="register-form" onsubmit="handleRegister(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="register-firstname">First Name</label>
+                        <input type="text" id="register-firstname">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-lastname">Last Name</label>
+                        <input type="text" id="register-lastname">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="register-username">Username</label>
+                    <input type="text" id="register-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" required>
+                    <small>Must contain at least one uppercase letter, one lowercase letter, and one number</small>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+            </form>
+            <div class="modal-footer">
+                <p>Already have an account? <a href="#" onclick="showLoginModal(); closeModal('register-modal');">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Book Detail Modal -->
+    <div id="book-modal" class="modal modal-large">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeModal('book-modal')">&times;</span>
+            </div>
+            <div id="book-modal-content">
+                <!-- Book details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Music Player Modal -->
+    <div id="music-modal" class="modal modal-large">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-music"></i> Music for Your Book</h3>
+                <span class="close" onclick="closeModal('music-modal')">&times;</span>
+            </div>
+            <div id="music-modal-content" class="music-content">
+                <!-- Music content will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification-toast" class="notification-toast">
+        <div class="toast-content">
+            <i class="toast-icon"></i>
+            <span class="toast-message"></span>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>

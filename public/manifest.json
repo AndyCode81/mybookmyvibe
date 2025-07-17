@@ -1,0 +1,27 @@
+{
+  "name": "MyBookMyVibe",
+  "short_name": "BookVibe",
+  "description": "Discover your perfect reading soundtrack",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["books", "music", "entertainment"],
+  "lang": "en-US",
+  "dir": "ltr"
+}

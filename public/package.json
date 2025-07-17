@@ -1,0 +1,13 @@
+{
+  "name": "mybookmyvibe",
+  "version": "1.0.0",
+  "description": "AI-powered book music discovery platform",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'No build needed for static site'",
+    "start": "echo 'Static site deployed'"
+  },
+  "keywords": ["books", "music", "ai", "reading", "spotify"],
+  "author": "MyBookMyVibe",
+  "license": "MIT"
+}
