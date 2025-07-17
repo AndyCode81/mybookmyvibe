@@ -1079,10 +1079,14 @@ function openYouTube(url) {
 }
 
 function generateAmazonAffiliate(title, author) {
-  // Your Amazon Associates tracking ID
-  const affiliateId = 'mybookmyvibe-20'; // Replace with your actual ID when approved
+  // Use full Amazon Associates link format
+  const affiliateId = 'mybookmyvibe-20';
+  const linkCode = 'll2';
+  const linkId = '4b427c8a08a6cca9fb38a044c99d7cd4';
+  const language = 'en_US';
+  const ref = 'as_li_ss_tl';
   const searchQuery = encodeURIComponent(`${title} ${author || ''}`);
-  return `https://www.amazon.com/s?k=${searchQuery}&tag=${affiliateId}`;
+  return `https://www.amazon.com/s?k=${searchQuery}&linkCode=${linkCode}&tag=${affiliateId}&linkId=${linkId}&language=${language}&ref_=${ref}`;
 }
 
 // Audio preview functionality
