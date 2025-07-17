@@ -25,7 +25,7 @@ app.use(helmet({
       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
       scriptSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", "data:", "https:", "http:"],
-      connectSrc: ["'self'", "https://api.spotify.com", "https://www.googleapis.com"]
+      connectSrc: ["'self'", "https://api.spotify.com", "https://www.googleapis.com", "https://mybookmyvibe.netlify.app"]
     }
   }
 }));
