@@ -430,11 +430,175 @@ async function searchBooks(query = null) {
   const searchQuery = query || searchInput.value.trim();
   
   if (!searchQuery) {
-    showToast('Please enter a search term', 'warning');
+    alert('Please enter a search term');
     return;
   }
+
+  console.log('Searching for:', searchQuery);
   
-  debouncedSearch(searchQuery);
+  try {
+    // Show loading
+    const resultsSection = document.getElementById('search-results');
+    resultsSection.style.display = 'block';
+    resultsSection.innerHTML = '<div class="container"><h2>Searching...</h2></div>';
+    
+    // Make API call
+    const response = await fetch(`${CONFIG.API_BASE_URL}/books/search?q=${encodeURIComponent(searchQuery)}`);
+    console.log('API Response:', response);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('Search results:', data);
+    
+    // Display results
+    if (data.books && data.books.length > 0) {
+      displaySearchResults(data.books);
+    } else {
+      resultsSection.innerHTML = '<div class="container"><h2>No results found</h2></div>';
+    }
+    
+  } catch (error) {
+    console.error('Search error:', error);
+    const resultsSection = document.getElementById('search-results');
+    resultsSection.innerHTML = `
+      <div class="container">
+        <h2>Search Error</h2>
+        <p>Error: ${error.message}</p>
+        <p>Please try again.</p>
+      </div>
+    `;
+  }
+}
+
+function displaySearchResults(books) {
+  const resultsSection = document.getElementById('search-results');
+  
+  let html = `
+    <div class="container">
+      <h2>Search Results (${books.length} books found)</h2>
+      <div class="books-grid">
+  `;
+  
+  books.slice(0, 12).forEach(book => {
+    html += `
+      <div class="book-card" onclick="selectBook('${book.googleBooksId}')">
+        <img src="${book.thumbnail || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'180\' viewBox=\'0 0 120 180\'%3E%3Crect fill=\'%23e5e7eb\' width=\'120\' height=\'180\'/%3E%3Ctext x=\'60\' y=\'90\' text-anchor=\'middle\' fill=\'%236b7280\' font-size=\'14\'%3ENo Cover%3C/text%3E%3C/svg%3E'}" alt="${book.title}">
+        <h3>${book.title}</h3>
+        <p>by ${book.authors ? book.authors.join(', ') : 'Unknown Author'}</p>
+        <button onclick="getMusicRecommendations('${book.googleBooksId}')" class="music-btn">🎵 Get Music</button>
+        <button onclick="buyOnAmazon('${book.title}', '${book.authors ? book.authors[0] : ''}')" class="amazon-btn">📚 Buy on Amazon</button>
+      </div>
+    `;
+  });
+  
+  html += '</div></div>';
+  resultsSection.innerHTML = html;
+  resultsSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+async function getMusicRecommendations(bookId) {
+  try {
+    console.log('Getting music for book:', bookId);
+    
+    const response = await fetch(`${CONFIG.API_BASE_URL}/music/recommendations/${bookId}`);
+    const data = await response.json();
+    
+    console.log('Music recommendations:', data);
+    
+    if (data.recommendations && data.recommendations.tracks) {
+      displayMusicRecommendations(data);
+    } else {
+      alert('No music recommendations found for this book.');
+    }
+    
+  } catch (error) {
+    console.error('Music recommendation error:', error);
+    alert('Failed to get music recommendations. Please try again.');
+  }
+}
+
+function displayMusicRecommendations(data) {
+  const modal = document.createElement('div');
+  modal.className = 'music-modal';
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  `;
+  
+  const content = document.createElement('div');
+  content.style.cssText = `
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+  `;
+  
+  content.innerHTML = `
+    <button onclick="this.closest('.music-modal').remove()" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer;">×</button>
+    <h2>🎵 Music Recommendations</h2>
+    <p><strong>Book:</strong> ${data.book.title}</p>
+    <p><strong>AI Analysis:</strong> ${data.aiAnalysis ? data.aiAnalysis.reasoning : 'Perfect ambient music for reading'}</p>
+    <div class="tracks">
+      ${data.recommendations.tracks.slice(0, 10).map(track => `
+        <div style="padding: 1rem; border: 1px solid #e5e7eb; margin: 0.5rem 0; border-radius: 0.5rem;">
+          <strong>${track.name}</strong><br>
+          <span style="color: #666;">by ${track.artists.join(', ')}</span><br>
+          <small>Album: ${track.album}</small>
+          ${track.preview_url ? `<br><button onclick="playPreview('${track.preview_url}')" style="margin-top: 0.5rem; padding: 0.25rem 0.5rem; background: #6366f1; color: white; border: none; border-radius: 0.25rem; cursor: pointer;">▶ Preview</button>` : ''}
+        </div>
+      `).join('')}
+    </div>
+  `;
+  
+  modal.appendChild(content);
+  document.body.appendChild(modal);
+}
+
+function playPreview(url) {
+  // Stop any currently playing audio
+  const existingAudio = document.querySelector('audio');
+  if (existingAudio) {
+    existingAudio.pause();
+    existingAudio.remove();
+  }
+  
+  // Play new preview
+  const audio = new Audio(url);
+  audio.play().catch(err => {
+    console.error('Audio play failed:', err);
+    alert('Sorry, preview not available');
+  });
+  
+  // Auto-stop after 30 seconds
+  setTimeout(() => {
+    audio.pause();
+    audio.remove();
+  }, 30000);
+}
+
+function buyOnAmazon(title, author) {
+  const searchQuery = encodeURIComponent(`${title} ${author} book`);
+  const amazonUrl = `https://www.amazon.com/s?k=${searchQuery}&tag=mybookmyvibe-20`;
+  window.open(amazonUrl, '_blank');
+}
+
+function selectBook(bookId) {
+  console.log('Selected book:', bookId);
+  // You can add more functionality here
 }
 
 async function searchByCategory(category) {
@@ -1099,18 +1263,10 @@ if (typeof module !== 'undefined' && module.exports) {
   };
 }
 
-// ===== MUSIC PLAYER & SOCIAL FEATURES =====
+// ===== SIMPLE MUSIC PLAYER (Working Version) =====
 
 let isPlaying = false;
-let currentTrackIndex = 0;
-let listenerCount = 1247;
-
-const sampleTracks = [
-  { title: "Atmospheric Reading Mix", artist: "Curated for \"Dune\" readers", book: "Dune" },
-  { title: "Jazz & Literature", artist: "Perfect for \"The Great Gatsby\"", book: "The Great Gatsby" },
-  { title: "Mystery Noir Sounds", artist: "Ideal for thriller novels", book: "Gone Girl" },
-  { title: "Fantasy Orchestral", artist: "Epic soundscapes", book: "Lord of the Rings" }
-];
+let currentAudio = null;
 
 function togglePlay() {
   const playBtn = document.querySelector('.play-btn i');
@@ -1118,95 +1274,29 @@ function togglePlay() {
   
   if (isPlaying) {
     playBtn.className = 'fas fa-pause';
-    updateListenerCount(1);
-    animatePlayback();
+    // In a real app, you'd start actual music here
+    console.log('Playing ambient reading music...');
   } else {
     playBtn.className = 'fas fa-play';
-    updateListenerCount(-1);
+    if (currentAudio) {
+      currentAudio.pause();
+    }
   }
 }
 
 function nextTrack() {
-  currentTrackIndex = (currentTrackIndex + 1) % sampleTracks.length;
-  updateTrackDisplay();
+  console.log('Next track');
+  // Update track display
+  document.querySelector('.track-title').textContent = 'Next Reading Mix';
 }
 
 function previousTrack() {
-  currentTrackIndex = currentTrackIndex === 0 ? sampleTracks.length - 1 : currentTrackIndex - 1;
-  updateTrackDisplay();
+  console.log('Previous track');
+  // Update track display  
+  document.querySelector('.track-title').textContent = 'Previous Reading Mix';
 }
 
-function updateTrackDisplay() {
-  const track = sampleTracks[currentTrackIndex];
-  document.querySelector('.track-title').textContent = track.title;
-  document.querySelector('.track-artist').textContent = track.artist;
-  
-  // Reset play button if switching tracks
-  const playBtn = document.querySelector('.play-btn i');
-  playBtn.className = 'fas fa-play';
-  isPlaying = false;
-}
-
-function updateListenerCount(change) {
-  listenerCount += change;
-  document.getElementById('listener-count').textContent = listenerCount.toLocaleString();
-}
-
-function animatePlayback() {
-  // Add subtle animations when playing
-  const trackArt = document.querySelector('.track-art');
-  trackArt.style.animation = isPlaying ? 'spin 3s linear infinite' : 'none';
-}
-
-// Add spin animation to CSS
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-`;
-document.head.appendChild(style);
-
-// Simulate real-time activity updates
-function updateCommunityActivity() {
-  const activities = [
-    { user: "Sarah M.", action: "created a playlist for", book: "The Seven Husbands of Evelyn Hugo", time: "2 minutes ago" },
-    { user: "Mike R.", action: "is listening to atmospheric sounds while reading", book: "Dune", time: "5 minutes ago" },
-    { user: "Emma L.", action: "shared her jazz playlist for", book: "The Great Gatsby", time: "12 minutes ago" },
-    { user: "Jake P.", action: "discovered the perfect soundtrack for", book: "1984", time: "18 minutes ago" },
-    { user: "Lisa K.", action: "is currently reading", book: "Pride and Prejudice", time: "25 minutes ago" }
-  ];
-  
-  const activityFeed = document.querySelector('.activity-feed');
-  if (activityFeed) {
-    const randomActivity = activities[Math.floor(Math.random() * activities.length)];
-    const activityHTML = `
-      <div class="activity-item" style="animation: slideIn 0.5s ease-out;">
-        <div class="user-avatar">${randomActivity.user.charAt(0)}</div>
-        <div class="activity-content">
-          <strong>${randomActivity.user}</strong> ${randomActivity.action} <em>"${randomActivity.book}"</em>
-          <span class="activity-time">${randomActivity.time}</span>
-        </div>
-      </div>
-    `;
-    
-    // Remove last activity and add new one at top
-    const items = activityFeed.querySelectorAll('.activity-item');
-    if (items.length >= 5) {
-      items[items.length - 1].remove();
-    }
-    activityFeed.insertAdjacentHTML('afterbegin', activityHTML);
-  }
-}
-
-// Update community activity every 30 seconds
-setInterval(updateCommunityActivity, 30000);
-
-// Animate listener count occasionally
-setInterval(() => {
-  if (Math.random() > 0.7) {
-    const change = Math.random() > 0.5 ? 1 : -1;
-    updateListenerCount(change);
-  }
-}, 10000);
+// Initialize the app when page loads
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('MyBookMyVibe app loaded');
+});

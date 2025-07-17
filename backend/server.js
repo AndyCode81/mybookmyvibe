@@ -116,7 +116,7 @@ app.get('/health', (req, res) => {
 });
 
 // API routes
-app.use('/api/auth', requireDatabase, authRoutes);
+app.use('/api/auth', authRoutes); // Remove requireDatabase to allow registration
 app.use('/api/books', booksRoutes);
 app.use('/api/music', musicRoutes);
 app.use('/api/reviews', requireDatabase, reviewsRoutes);
