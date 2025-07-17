@@ -1098,3 +1098,115 @@ if (typeof module !== 'undefined' && module.exports) {
     CONFIG
   };
 }
+
+// ===== MUSIC PLAYER & SOCIAL FEATURES =====
+
+let isPlaying = false;
+let currentTrackIndex = 0;
+let listenerCount = 1247;
+
+const sampleTracks = [
+  { title: "Atmospheric Reading Mix", artist: "Curated for \"Dune\" readers", book: "Dune" },
+  { title: "Jazz & Literature", artist: "Perfect for \"The Great Gatsby\"", book: "The Great Gatsby" },
+  { title: "Mystery Noir Sounds", artist: "Ideal for thriller novels", book: "Gone Girl" },
+  { title: "Fantasy Orchestral", artist: "Epic soundscapes", book: "Lord of the Rings" }
+];
+
+function togglePlay() {
+  const playBtn = document.querySelector('.play-btn i');
+  isPlaying = !isPlaying;
+  
+  if (isPlaying) {
+    playBtn.className = 'fas fa-pause';
+    updateListenerCount(1);
+    animatePlayback();
+  } else {
+    playBtn.className = 'fas fa-play';
+    updateListenerCount(-1);
+  }
+}
+
+function nextTrack() {
+  currentTrackIndex = (currentTrackIndex + 1) % sampleTracks.length;
+  updateTrackDisplay();
+}
+
+function previousTrack() {
+  currentTrackIndex = currentTrackIndex === 0 ? sampleTracks.length - 1 : currentTrackIndex - 1;
+  updateTrackDisplay();
+}
+
+function updateTrackDisplay() {
+  const track = sampleTracks[currentTrackIndex];
+  document.querySelector('.track-title').textContent = track.title;
+  document.querySelector('.track-artist').textContent = track.artist;
+  
+  // Reset play button if switching tracks
+  const playBtn = document.querySelector('.play-btn i');
+  playBtn.className = 'fas fa-play';
+  isPlaying = false;
+}
+
+function updateListenerCount(change) {
+  listenerCount += change;
+  document.getElementById('listener-count').textContent = listenerCount.toLocaleString();
+}
+
+function animatePlayback() {
+  // Add subtle animations when playing
+  const trackArt = document.querySelector('.track-art');
+  trackArt.style.animation = isPlaying ? 'spin 3s linear infinite' : 'none';
+}
+
+// Add spin animation to CSS
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+`;
+document.head.appendChild(style);
+
+// Simulate real-time activity updates
+function updateCommunityActivity() {
+  const activities = [
+    { user: "Sarah M.", action: "created a playlist for", book: "The Seven Husbands of Evelyn Hugo", time: "2 minutes ago" },
+    { user: "Mike R.", action: "is listening to atmospheric sounds while reading", book: "Dune", time: "5 minutes ago" },
+    { user: "Emma L.", action: "shared her jazz playlist for", book: "The Great Gatsby", time: "12 minutes ago" },
+    { user: "Jake P.", action: "discovered the perfect soundtrack for", book: "1984", time: "18 minutes ago" },
+    { user: "Lisa K.", action: "is currently reading", book: "Pride and Prejudice", time: "25 minutes ago" }
+  ];
+  
+  const activityFeed = document.querySelector('.activity-feed');
+  if (activityFeed) {
+    const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+    const activityHTML = `
+      <div class="activity-item" style="animation: slideIn 0.5s ease-out;">
+        <div class="user-avatar">${randomActivity.user.charAt(0)}</div>
+        <div class="activity-content">
+          <strong>${randomActivity.user}</strong> ${randomActivity.action} <em>"${randomActivity.book}"</em>
+          <span class="activity-time">${randomActivity.time}</span>
+        </div>
+      </div>
+    `;
+    
+    // Remove last activity and add new one at top
+    const items = activityFeed.querySelectorAll('.activity-item');
+    if (items.length >= 5) {
+      items[items.length - 1].remove();
+    }
+    activityFeed.insertAdjacentHTML('afterbegin', activityHTML);
+  }
+}
+
+// Update community activity every 30 seconds
+setInterval(updateCommunityActivity, 30000);
+
+// Animate listener count occasionally
+setInterval(() => {
+  if (Math.random() > 0.7) {
+    const change = Math.random() > 0.5 ? 1 : -1;
+    updateListenerCount(change);
+  }
+}, 10000);

@@ -47,7 +47,7 @@ const corsOrigins = process.env.CORS_ORIGINS
   : ['http://localhost:3000'];
 
 app.use(cors({
-  origin: corsOrigins,
+  origin: true, // Temporarily allow all origins for testing
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']

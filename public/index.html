@@ -100,7 +100,7 @@
                 <div class="hero-features">
                     <div class="feature">
                         <i class="fas fa-music"></i>
-                        <span>Music Recommendations</span>
+                        <span>AI Music Curation</span>
                     </div>
                     <div class="feature">
                         <i class="fas fa-book"></i>
@@ -108,7 +108,20 @@
                     </div>
                     <div class="feature">
                         <i class="fas fa-users"></i>
-                        <span>Community Reviews</span>
+                        <span>Reader Community</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-headphones"></i>
+                        <span>Reading Playlists</span>
+                    </div>
+                </div>
+                
+                <!-- Social CTA -->
+                <div class="social-cta">
+                    <p>🎧 Join <strong>50,000+ readers</strong> who've found their perfect reading soundtrack</p>
+                    <div class="social-proof">
+                        <span class="social-avatars">👤👤👤</span>
+                        <span class="social-text">Sarah, Mike & 247 others are listening now</span>
                     </div>
                 </div>
             </div>
@@ -118,6 +131,102 @@
                     <div class="floating-book">📚</div>
                     <div class="floating-music">🎵</div>
                     <div class="floating-heart">💝</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Music Player -->
+        <section class="music-player-section">
+            <div class="container">
+                <div class="music-player-widget">
+                    <h3>🎵 Now Playing: Reading Vibes</h3>
+                    <div class="current-track">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 24 24'%3E%3Cpath fill='%236366f1' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z'/%3E%3C/svg%3E" alt="Now Playing" class="track-art">
+                        <div class="track-info">
+                            <div class="track-title">Atmospheric Reading Mix</div>
+                            <div class="track-artist">Curated for "Dune" readers</div>
+                        </div>
+                        <div class="music-controls">
+                            <button class="control-btn" onclick="previousTrack()"><i class="fas fa-step-backward"></i></button>
+                            <button class="control-btn play-btn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
+                            <button class="control-btn" onclick="nextTrack()"><i class="fas fa-step-forward"></i></button>
+                        </div>
+                    </div>
+                    <div class="listeners-count">🎧 <span id="listener-count">1,247</span> readers listening</div>
+                </div>
+                
+                <!-- Amazon Ad Placement -->
+                <div class="amazon-ad-banner">
+                    <div class="ad-content">
+                        <span class="ad-label">📚 Recommended for You</span>
+                        <h4>Get these trending books on Amazon</h4>
+                        <div class="ad-books">
+                            <div class="ad-book">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='120' viewBox='0 0 100 150'%3E%3Crect fill='%23e0e7ff' width='100' height='150'/%3E%3Ctext x='50' y='75' text-anchor='middle' fill='%236366f1' font-size='12'%3EBook Cover%3C/text%3E%3C/svg%3E" alt="Book">
+                                <div class="ad-book-title">Dune</div>
+                                <div class="ad-book-price">$12.99</div>
+                            </div>
+                            <div class="ad-book">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='120' viewBox='0 0 100 150'%3E%3Crect fill='%23fef3c7' width='100' height='150'/%3E%3Ctext x='50' y='75' text-anchor='middle' fill='%23f59e0b' font-size='12'%3EBook Cover%3C/text%3E%3C/svg%3E" alt="Book">
+                                <div class="ad-book-title">1984</div>
+                                <div class="ad-book-price">$9.99</div>
+                            </div>
+                            <div class="ad-book">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='120' viewBox='0 0 100 150'%3E%3Crect fill='%23d1fae5' width='100' height='150'/%3E%3Ctext x='50' y='75' text-anchor='middle' fill='%2310b981' font-size='12'%3EBook Cover%3C/text%3E%3C/svg%3E" alt="Book">
+                                <div class="ad-book-title">The Hobbit</div>
+                                <div class="ad-book-price">$11.99</div>
+                            </div>
+                        </div>
+                        <a href="#" class="amazon-cta-btn">Shop Now on Amazon</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Community Section -->
+        <section class="community-section">
+            <div class="container">
+                <h2>Reader Community</h2>
+                <div class="community-stats">
+                    <div class="stat">
+                        <span class="stat-number">50K+</span>
+                        <span class="stat-label">Active Readers</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">25K+</span>
+                        <span class="stat-label">Playlists Created</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Hours of Music</span>
+                    </div>
+                </div>
+                
+                <div class="recent-activity">
+                    <h3>Recent Community Activity</h3>
+                    <div class="activity-feed">
+                        <div class="activity-item">
+                            <div class="user-avatar">👤</div>
+                            <div class="activity-content">
+                                <strong>Sarah M.</strong> created a playlist for <em>"The Seven Husbands of Evelyn Hugo"</em>
+                                <span class="activity-time">2 minutes ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="user-avatar">👨</div>
+                            <div class="activity-content">
+                                <strong>Mike R.</strong> is listening to atmospheric sounds while reading <em>"Dune"</em>
+                                <span class="activity-time">5 minutes ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="user-avatar">👩</div>
+                            <div class="activity-content">
+                                <strong>Emma L.</strong> shared her jazz playlist for <em>"The Great Gatsby"</em>
+                                <span class="activity-time">12 minutes ago</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
