@@ -497,23 +497,20 @@ function displaySearchResults(books) {
 }
 
 async function getMusicRecommendations(bookId) {
+  const vibeArea = document.getElementById('music-vibe-area');
+  const vibeContent = document.getElementById('vibe-content');
+  vibeArea.style.display = 'block';
+  vibeContent.innerHTML = '<div style="text-align:center;padding:2rem;"><i class="fas fa-spinner fa-spin"></i> Loading music vibe...</div>';
   try {
-    console.log('Getting music for book:', bookId);
-    
     const response = await fetch(`${CONFIG.API_BASE_URL}/music/recommendations/${bookId}`);
     const data = await response.json();
-    
-    console.log('Music recommendations:', data);
-    
-    if (data.recommendations && data.recommendations.tracks) {
+    if (data && data.recommendations) {
       displayMusicRecommendations(data);
     } else {
-      alert('No music recommendations found for this book.');
+      vibeContent.innerHTML = '<div style="text-align:center;padding:2rem;">No music recommendations found for this book.</div>';
     }
-    
   } catch (error) {
-    console.error('Music recommendation error:', error);
-    alert('Failed to get music recommendations. Please try again.');
+    vibeContent.innerHTML = `<div style='text-align:center;padding:2rem;color:red;'>Failed to get music recommendations.<br>${error.message}</div>`;
   }
 }
 

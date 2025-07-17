@@ -1,3 +1,105 @@
+/* ===== HERO FLEX LAYOUT ===== */
+.hero-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.hero-content {
+  flex: 2;
+  min-width: 0;
+}
+
+.hero-music-area {
+  flex: 1;
+  min-width: 320px;
+  max-width: 400px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.music-vibe-area {
+  background: linear-gradient(135deg, #6366f1 80%, #818cf8 100%);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-lg);
+  color: #fff;
+  min-height: 320px;
+  margin-top: 2rem;
+  animation: slideInFromRight 0.5s ease-out;
+}
+
+.music-vibe-area h3 {
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+.vibe-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.vibe-track {
+  background: rgba(255,255,255,0.1);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.vibe-track-info {
+  flex: 1;
+}
+
+.vibe-track-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.vibe-track-artist {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.vibe-play-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.vibe-play-btn:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.1);
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
 /* ===== CSS VARIABLES ===== */
 :root {
   /* Colors */

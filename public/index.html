@@ -84,60 +84,26 @@
     <main>
         <!-- Hero Section -->
         <section id="home" class="hero">
-            <div class="hero-content">
-                <h1>Discover Your Perfect <span class="highlight">Reading Soundtrack</span></h1>
-                <p>Find the ideal music to accompany your favorite books. Explore curated playlists, discover new reads, and connect with fellow book lovers.</p>
-                
-                <div class="hero-search">
-                    <div class="search-container">
-                        <input type="text" id="hero-search" placeholder="Search for books, authors, or genres...">
-                        <button onclick="searchBooks()" class="search-btn">
-                            <i class="fas fa-search"></i>
-                        </button>
+            <div class="hero-flex">
+                <div class="hero-content">
+                    <h1>Discover Your Perfect <span class="highlight">Reading Soundtrack</span></h1>
+                    <p>Find the ideal music to accompany your favorite books. Explore curated playlists, discover new reads, and connect with fellow book lovers.</p>
+                    <div class="hero-search">
+                        <div class="search-container">
+                            <input type="text" id="hero-search" placeholder="Search for books, authors, or genres...">
+                            <button onclick="searchBooks()" class="search-btn">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
                     </div>
+                    <div id="search-results" class="search-results"></div>
                 </div>
-                
-                <div class="hero-features">
-                    <div class="feature">
-                        <i class="fas fa-music"></i>
-                        <span>AI Music Curation</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-book"></i>
-                        <span>Book Discovery</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-users"></i>
-                        <span>Reader Community</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-headphones"></i>
-                        <span>Reading Playlists</span>
-                    </div>
-                </div>
-                
-                <!-- Social CTA -->
-                <div class="social-cta">
-                    <p>🎧 Join <strong>50,000+ readers</strong> who've found their perfect reading soundtrack</p>
-                    <div class="social-proof">
-                        <span class="social-avatars">👤👤👤</span>
-                        <span class="social-text">Sarah, Mike & 247 others are listening now</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="hero-image">
-                <div class="floating-elements">
-                    <div class="floating-book">📚</div>
-                    <div class="floating-music">🎵</div>
-                    <div class="floating-heart">💝</div>
-                </div>
-                
-                <!-- Music Recommendations Display -->
-                <div id="music-vibe-area" class="music-vibe-area" style="display: none;">
-                    <h3>🎵 Your Book Vibe</h3>
-                    <div id="vibe-content" class="vibe-content">
-                        <!-- Music recommendations will appear here -->
+                <div class="hero-music-area">
+                    <div id="music-vibe-area" class="music-vibe-area">
+                        <h3>🎵 Your Book Vibe</h3>
+                        <div id="vibe-content" class="vibe-content">
+                            <!-- Music recommendations will appear here -->
+                        </div>
                     </div>
                 </div>
             </div>
