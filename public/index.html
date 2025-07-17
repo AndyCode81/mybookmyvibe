@@ -29,10 +29,16 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Loading Spinner -->
-    <div id="loading-spinner" class="loading-spinner">
-        <div class="spinner"></div>
-        <p>Loading your book vibes...</p>
+    <!-- Modern Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay" style="display:none;">
+      <div class="loading-spinner-modern">
+        <svg width="60" height="60" viewBox="0 0 50 50">
+          <circle cx="25" cy="25" r="20" fill="none" stroke="#6366f1" stroke-width="5" stroke-linecap="round" stroke-dasharray="31.4 31.4" stroke-dashoffset="0">
+            <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+        <div class="loading-text">Finding your vibe...</div>
+      </div>
     </div>
 
     <!-- Navigation -->

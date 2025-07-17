@@ -199,12 +199,12 @@ const api = {
 const ui = {
   showLoading() {
     state.loading = true;
-    document.getElementById('loading-spinner').style.display = 'flex';
+    document.getElementById('loading-overlay').style.display = 'flex';
   },
 
   hideLoading() {
     state.loading = false;
-    document.getElementById('loading-spinner').style.display = 'none';
+    document.getElementById('loading-overlay').style.display = 'none';
   },
 
   renderBookCard(book) {
@@ -324,24 +324,18 @@ async function handleLogin(event) {
   try {
     ui.showLoading();
     const response = await api.login(email, password);
-    
     state.accessToken = response.accessToken;
     state.currentUser = response.user;
-    
     localStorage.setItem('accessToken', response.accessToken);
     localStorage.setItem('currentUser', JSON.stringify(response.user));
-    
     updateAuthUI();
     closeModal('login-modal');
     showToast('Welcome back!', 'success');
-    
-    // Reset form
     document.getElementById('login-form').reset();
-    
   } catch (error) {
     showToast(error.message || 'Login failed', 'error');
   } finally {
-    ui.hideLoading();
+    setTimeout(() => ui.hideLoading(), 400);
   }
 }
 
@@ -359,24 +353,18 @@ async function handleRegister(event) {
   try {
     ui.showLoading();
     const response = await api.register(userData);
-    
     state.accessToken = response.accessToken;
     state.currentUser = response.user;
-    
     localStorage.setItem('accessToken', response.accessToken);
     localStorage.setItem('currentUser', JSON.stringify(response.user));
-    
     updateAuthUI();
     closeModal('register-modal');
     showToast('Account created successfully!', 'success');
-    
-    // Reset form
     document.getElementById('register-form').reset();
-    
   } catch (error) {
     showToast(error.message || 'Registration failed', 'error');
   } finally {
-    ui.hideLoading();
+    setTimeout(() => ui.hideLoading(), 400);
   }
 }
 
@@ -397,6 +385,7 @@ const debouncedSearch = debounce(async (query) => {
     document.getElementById('search-results').style.display = 'none';
     return;
   }
+  ui.showLoading();
 
   try {
     ui.showLoading();
@@ -501,6 +490,7 @@ async function getMusicRecommendations(bookId) {
   const vibeContent = document.getElementById('vibe-content');
   vibeArea.style.display = 'block';
   vibeContent.innerHTML = '<div style="text-align:center;padding:2rem;"><i class="fas fa-spinner fa-spin"></i> Loading music vibe...</div>';
+  ui.showLoading();
   try {
     const response = await fetch(`${CONFIG.API_BASE_URL}/music/recommendations/${bookId}`);
     const data = await response.json();
@@ -511,6 +501,8 @@ async function getMusicRecommendations(bookId) {
     }
   } catch (error) {
     vibeContent.innerHTML = `<div style='text-align:center;padding:2rem;color:red;'>Failed to get music recommendations.<br>${error.message}</div>`;
+  } finally {
+    setTimeout(() => ui.hideLoading(), 400);
   }
 }
 
