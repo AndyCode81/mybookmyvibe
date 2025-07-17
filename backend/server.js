@@ -58,20 +58,30 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
-// Session configuration
-app.use(session({
+// Session configuration - fallback to memory store if MongoDB unavailable
+const sessionConfig = {
   secret: process.env.SESSION_SECRET || 'fallback-secret-change-this',
   resave: false,
   saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost:27017/mybookmyvibe'
-  }),
   cookie: {
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
     maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
   }
-}));
+};
+
+// Only use MongoDB store if we have a connection string, otherwise use memory store
+if (process.env.MONGODB_URI) {
+  try {
+    sessionConfig.store = MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI
+    });
+  } catch (err) {
+    console.warn('MongoDB session store failed, using memory store');
+  }
+}
+
+app.use(session(sessionConfig));
 
 // Database connection
 let isMongoDBConnected = false;
