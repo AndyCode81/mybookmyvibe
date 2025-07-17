@@ -510,6 +510,119 @@ a:hover {
   50% { transform: translateY(-20px); }
 }
 
+/* ===== MUSIC VIBE AREA ===== */
+.music-vibe-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.9), rgba(168, 85, 247, 0.9));
+  border-radius: var(--border-radius-xl);
+  padding: var(--spacing-lg);
+  color: white;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-xl);
+  animation: slideInFromRight 0.5s ease-out;
+}
+
+.music-vibe-area h3 {
+  color: white;
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.vibe-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.vibe-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  transition: var(--transition-fast);
+}
+
+.vibe-track:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.vibe-track-info {
+  flex: 1;
+}
+
+.vibe-track-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 2px;
+}
+
+.vibe-track-artist {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.vibe-play-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.vibe-play-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.vibe-close-btn {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.vibe-close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 /* ===== SEARCH RESULTS ===== */
 .search-results {
   padding: var(--spacing-3xl) 0;

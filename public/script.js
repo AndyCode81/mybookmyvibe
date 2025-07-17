@@ -231,14 +231,11 @@ const ui = {
           <p class="book-author">${sanitizeHtml(book.authors?.join(', ') || 'Unknown Author')}</p>
           <span class="book-genre">${sanitizeHtml(genre)}</span>
           <div class="book-actions">
-            <button class="btn btn-primary btn-small" onclick="event.stopPropagation(); showBookDetails('${book._id || book.googleBooksId}')">
-              <i class="fas fa-eye"></i> View Details
+            <button class="btn btn-primary" onclick="event.stopPropagation(); getMusicRecommendations('${book._id || book.googleBooksId}')">
+              🎵 Get Vibe
             </button>
-            <button class="btn btn-secondary btn-small" onclick="event.stopPropagation(); getMusicForBook('${book._id || book.googleBooksId}')">
-              <i class="fas fa-music"></i> Get Music
-            </button>
-            <a href="${generateAmazonAffiliate(book.title, book.authors?.[0])}" target="_blank" class="btn btn-amazon btn-small" onclick="event.stopPropagation();">
-              <i class="fab fa-amazon"></i> Buy
+            <a href="${generateAmazonAffiliate(book.title, book.authors?.[0])}" target="_blank" class="btn btn-outline btn-small" onclick="event.stopPropagation();" title="Buy on Amazon">
+              📚 Buy
             </a>
           </div>
         </div>
@@ -521,51 +518,87 @@ async function getMusicRecommendations(bookId) {
 }
 
 function displayMusicRecommendations(data) {
-  const modal = document.createElement('div');
-  modal.className = 'music-modal';
-  modal.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  `;
+  // Show in the hero vibe area instead of modal
+  const vibeArea = document.getElementById('music-vibe-area');
+  const vibeContent = document.getElementById('vibe-content');
+  const floatingElements = document.querySelector('.floating-elements');
   
-  const content = document.createElement('div');
-  content.style.cssText = `
-    background: white;
-    padding: 2rem;
-    border-radius: 1rem;
-    max-width: 600px;
-    max-height: 80vh;
-    overflow-y: auto;
-    position: relative;
-  `;
+  if (!vibeArea || !vibeContent) return;
   
-  content.innerHTML = `
-    <button onclick="this.closest('.music-modal').remove()" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer;">×</button>
-    <h2>🎵 Music Recommendations</h2>
-    <p><strong>Book:</strong> ${data.book.title}</p>
-    <p><strong>AI Analysis:</strong> ${data.aiAnalysis ? data.aiAnalysis.reasoning : 'Perfect ambient music for reading'}</p>
-    <div class="tracks">
-      ${data.recommendations.tracks.slice(0, 10).map(track => `
-        <div style="padding: 1rem; border: 1px solid #e5e7eb; margin: 0.5rem 0; border-radius: 0.5rem;">
-          <strong>${track.name}</strong><br>
-          <span style="color: #666;">by ${track.artists.join(', ')}</span><br>
-          <small>Album: ${track.album}</small>
-          ${track.preview_url ? `<br><button onclick="playPreview('${track.preview_url}')" style="margin-top: 0.5rem; padding: 0.25rem 0.5rem; background: #6366f1; color: white; border: none; border-radius: 0.25rem; cursor: pointer;">▶ Preview</button>` : ''}
+  // Hide floating elements and show vibe area
+  floatingElements.style.display = 'none';
+  vibeArea.style.display = 'block';
+  
+  // Clear previous content
+  vibeContent.innerHTML = '';
+  
+  // Add close button functionality
+  let closeBtn = vibeArea.querySelector('.vibe-close-btn');
+  if (!closeBtn) {
+    closeBtn = document.createElement('button');
+    closeBtn.className = 'vibe-close-btn';
+    closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+    closeBtn.onclick = () => {
+      vibeArea.style.display = 'none';
+      floatingElements.style.display = 'block';
+    };
+    vibeArea.appendChild(closeBtn);
+  }
+  
+  // Display book info if available
+  if (data.book) {
+    const bookInfo = document.createElement('div');
+    bookInfo.className = 'vibe-book-info';
+    bookInfo.innerHTML = `
+      <div style="text-align: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.2);">
+        <strong>${data.book.title}</strong>
+        ${data.book.authors ? `<br><small>by ${data.book.authors.join(', ')}</small>` : ''}
+      </div>
+    `;
+    vibeContent.appendChild(bookInfo);
+  }
+  
+  // Display music recommendations
+  if (data.recommendations && data.recommendations.tracks && data.recommendations.tracks.length > 0) {
+    data.recommendations.tracks.slice(0, 8).forEach(track => {
+      const trackElement = document.createElement('div');
+      trackElement.className = 'vibe-track';
+      trackElement.innerHTML = `
+        <div class="vibe-track-info">
+          <div class="vibe-track-name">${track.name}</div>
+          <div class="vibe-track-artist">${track.artists ? track.artists.join(', ') : 'Various Artists'}</div>
         </div>
-      `).join('')}
-    </div>
-  `;
+        <button class="vibe-play-btn" onclick="playPreview('${track.preview_url || ''}')" title="Play Preview">
+          <i class="fas fa-play"></i>
+        </button>
+      `;
+      vibeContent.appendChild(trackElement);
+    });
+  }
   
-  modal.appendChild(content);
-  document.body.appendChild(modal);
+  // Display AI analysis if available
+  if (data.aiAnalysis && data.aiAnalysis.reasoning) {
+    const analysisElement = document.createElement('div');
+    analysisElement.className = 'vibe-analysis';
+    analysisElement.innerHTML = `
+      <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2);">
+        <strong>🎵 Vibe Analysis:</strong><br>
+        <small style="opacity: 0.9;">${data.aiAnalysis.reasoning}</small>
+      </div>
+    `;
+    vibeContent.appendChild(analysisElement);
+  }
+  
+  // If no recommendations, show fallback
+  if (!data.recommendations || !data.recommendations.tracks || data.recommendations.tracks.length === 0) {
+    vibeContent.innerHTML = `
+      <div style="text-align: center; padding: 2rem;">
+        <i class="fas fa-music" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.6;"></i>
+        <p>We're still analyzing this book's vibe!</p>
+        <p style="opacity: 0.8; font-size: 0.9rem;">Try searching for popular books like "Dune", "Harry Potter", or "The Hobbit"</p>
+      </div>
+    `;
+  }
 }
 
 function playPreview(url) {
@@ -1050,6 +1083,36 @@ function generateAmazonAffiliate(title, author) {
   const affiliateId = 'mybookmyvibe-20'; // Replace with your actual ID when approved
   const searchQuery = encodeURIComponent(`${title} ${author || ''}`);
   return `https://www.amazon.com/s?k=${searchQuery}&tag=${affiliateId}`;
+}
+
+// Audio preview functionality
+function playPreview(previewUrl) {
+  if (!previewUrl) {
+    alert('No preview available for this track');
+    return;
+  }
+  
+  // Stop current audio if playing
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+  }
+  
+  // Play new audio
+  currentAudio = new Audio(previewUrl);
+  currentAudio.volume = 0.3; // Set to 30% volume
+  currentAudio.play().catch(err => {
+    console.log('Audio play failed:', err);
+    alert('Unable to play preview. This might be due to browser restrictions.');
+  });
+  
+  // Auto-stop after 30 seconds
+  setTimeout(() => {
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio = null;
+    }
+  }, 30000);
 }
 
 function updateMusicPlayer(spotifyTracks) {
