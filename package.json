@@ -1,0 +1,17 @@
+{
+  "name": "mybookmyvibe",
+  "version": "1.0.0",
+  "description": "AI-powered book discovery app with music recommendations",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "cd backend && npm start",
+    "install": "cd backend && npm install",
+    "build": "cd backend && npm install"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": ["books", "music", "ai", "recommendations"],
+  "author": "AndyCode81",
+  "license": "MIT"
+}
